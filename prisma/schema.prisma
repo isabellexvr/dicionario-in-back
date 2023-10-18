@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model palavras {
+  C_digo                    String? @map("Código")
+  Verbete                   String?
+  verbeteIngles             String?
+  num                       Int?
+  indice                    Int?
+  cabeca_simb               String?
+  rubrica                   String?
+  grupo                     String?
+  classeGram                String?
+  genero_num                String?
+  volp                      String?
+  fontes                    String?
+  remissivaComplementar     String?
+  remissivaImperativa       String?
+  definicao                 String?
+  f_rmula                   String? @map("fórmula")
+  topicoIluminacaoNatural   String?
+  locucao_expressoes        String?
+  etimologiaBruto           String?
+  ortoepia                  String?
+  plural                    String?
+  sinonimosVariantes        String?
+  antonimos                 String?
+  achega                    String?
+  exemplo                   String?
+  abonacao_citacoes_adagios String?
+  outrasLinguas             String?
+  fig                       String? @db.VarChar(5)
+  comentariosExtraBrutos    String?
+  comentariosExtraEditados  String?
+  obsrcc                    String?
+  voceSabia                 String?
+  id                        Int     @id @default(autoincrement())
+}
