@@ -8,4 +8,8 @@ export class WordsService {
     async findAllWords(){
         return this.wordsRepository.findWords()
     }
+
+    async findWordByName(word: string){
+        return this.wordsRepository.findWordByName(word);
+    }
 }

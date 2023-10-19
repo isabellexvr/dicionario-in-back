@@ -8,4 +8,8 @@ export class WordsRepository{
     async findWords(){
         return this.prisma.palavras.findMany();
     }
+
+    async findWordByName(word: string){
+        return this.prisma.palavras.findFirst({where: {Verbete: word}});
+    }
 }

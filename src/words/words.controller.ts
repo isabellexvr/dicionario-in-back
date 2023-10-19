@@ -1,4 +1,4 @@
-import { Controller,Get } from '@nestjs/common';
+import { Controller,Get, Param, ParseIntPipe } from '@nestjs/common';
 import { WordsService } from './words.service';
 
 @Controller('words')
@@ -9,5 +9,10 @@ export class WordsController {
     async getAllWords(){
         const words = await this.wordsService.findAllWords()
         return words;
+    }
+
+    @Get(":word")
+    async getWordByName(@Param("word") word: string){
+        return this.wordsService.findWordByName(word);
     }
 }
