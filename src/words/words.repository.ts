@@ -10,6 +10,10 @@ export class WordsRepository{
     }
 
     async findWordByName(word: string){
-        return this.prisma.palavras.findFirst({where: {Verbete: word}});
+        return this.prisma.palavras.findFirst({
+            where: { Verbete: word },
+            orderBy: { Verbete: 'asc' }
+        });
     }
+    
 }

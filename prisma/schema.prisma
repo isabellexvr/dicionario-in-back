@@ -8,7 +8,7 @@ datasource db {
 }
 
 model palavras {
-  C_digo                    String? @map("Código")
+  C_digo                    String?       @map("Código")
   Verbete                   String?
   verbeteIngles             String?
   num                       Int?
@@ -23,7 +23,7 @@ model palavras {
   remissivaComplementar     String?
   remissivaImperativa       String?
   definicao                 String?
-  f_rmula                   String? @map("fórmula")
+  f_rmula                   String?       @map("fórmula")
   topicoIluminacaoNatural   String?
   locucao_expressoes        String?
   etimologiaBruto           String?
@@ -35,10 +35,29 @@ model palavras {
   exemplo                   String?
   abonacao_citacoes_adagios String?
   outrasLinguas             String?
-  fig                       String? @db.VarChar(5)
+  fig                       String?       @db.VarChar(5)
   comentariosExtraBrutos    String?
   comentariosExtraEditados  String?
   obsrcc                    String?
   voceSabia                 String?
-  id                        Int     @id @default(autoincrement())
+  id                        Int           @id @default(autoincrement())
+  comentarios               comentarios[]
+}
+
+model comentarios {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int
+  palavraId  Int
+  comentario String
+  palavras   palavras @relation(fields: [palavraId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuarios   usuarios @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model usuarios {
+  id          Int           @id @default(autoincrement())
+  userName    String        @db.VarChar(50)
+  nome        String
+  email       String
+  senha       String
+  comentarios comentarios[]
 }
