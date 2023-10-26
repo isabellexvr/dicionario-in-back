@@ -55,9 +55,10 @@ model comentarios {
 
 model usuarios {
   id          Int           @id @default(autoincrement())
-  userName    String        @db.VarChar(50)
+  userName    String        @unique @db.VarChar(50)
   nome        String
-  email       String
-  senha       String
+  email       String        @unique
+  senha       String        @unique
+  admin       Int           @db.SmallInt
   comentarios comentarios[]
 }
