@@ -7,6 +7,7 @@ import { UsersRepository } from './users.repository';
 @Module({
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
-  imports:[PrismaModule]
+  imports:[PrismaModule],
+  exports: [UsersRepository]
 })
 export class UsersModule {}
