@@ -10,6 +10,7 @@ import { UsersRepository } from 'src/users/users.repository';
   controllers: [AuthController],
   providers: [AuthService],
   imports: [JwtModule.register({ secret: process.env.JWT_SECRET }),
-    PrismaModule, forwardRef(() => UsersModule)]
+    PrismaModule, forwardRef(() => UsersModule)],
+    exports:[AuthService]
 })
 export class AuthModule { }
