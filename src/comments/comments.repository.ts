@@ -11,6 +11,6 @@ export class CommentsRepository {
     }
 
     getByWord(@Body() palavraId: number) {
-        return this.prisma.comentarios.findMany({ where: { palavraId } });
+        return this.prisma.comentarios.findMany({ where: { palavraId }, include: { usuarios: true } });
     }
 }

@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { CreateUserDTO } from './dtos/new-user.dto';
 import * as bcrypt from "bcrypt"
@@ -22,4 +22,12 @@ export class UsersService {
         if (!user) throw new NotFoundException("Usuário não encontrado.")
         return user;
       }
+
+    async checkIfAdmin(userId: number){
+        const user = await this.usersRepository.findById(userId);
+        if(!user.admin){
+            throw new ForbiddenException("Você não pode fazer isso");
+        }
+    }
+
 }
