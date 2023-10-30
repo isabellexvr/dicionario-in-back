@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { WordsService } from './words.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { palavras, usuarios } from '@prisma/client';
@@ -57,10 +57,14 @@ export class WordsController {
     @UseGuards(AuthGuard)
     @Put("edit-word/:wordId")
     async editWord(@Param("wordId", ParseIntPipe) wordId: number, @Body() body: palavrasPrototype, @AuthorizedUser() user: usuarios) {
-        return this.wordsService.editComment(wordId, body, user.id);
+        return this.wordsService.editWord(wordId, body, user.id);
     }
     @Delete("delete-word/:wordId")
-    async deleteWord(@Param("wordId", ParseIntPipe) wordId: number, @AuthorizedUser() user: usuarios){
+    async deleteWord(@Param("wordId", ParseIntPipe) wordId: number, @AuthorizedUser() user: usuarios) {
+        return this.wordsService.deleteWord(wordId, user.id);
+    }
+    @Post("new-word")
+    async createNewWord(@Body() data: palavrasPrototype){
         
     }
 }

@@ -21,4 +21,8 @@ export class WordsRepository {
         return this.prisma.palavras.update({ where: { id: wordId }, data });
     }
 
+    async deleteWordById(wordId: number) {
+        return this.prisma.palavras.delete({ where: { id: wordId } })
+    }
+
 }
