@@ -59,12 +59,15 @@ export class WordsController {
     async editWord(@Param("wordId", ParseIntPipe) wordId: number, @Body() body: palavrasPrototype, @AuthorizedUser() user: usuarios) {
         return this.wordsService.editWord(wordId, body, user.id);
     }
+    @UseGuards(AuthGuard)
     @Delete("delete-word/:wordId")
     async deleteWord(@Param("wordId", ParseIntPipe) wordId: number, @AuthorizedUser() user: usuarios) {
         return this.wordsService.deleteWord(wordId, user.id);
     }
+    
+    @UseGuards(AuthGuard)
     @Post("new-word")
     async createNewWord(@Body() data: palavrasPrototype){
-        
+        return this.createNewWord(data);
     }
 }

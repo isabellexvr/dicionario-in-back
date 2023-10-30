@@ -25,4 +25,11 @@ export class WordsRepository {
         return this.prisma.palavras.delete({ where: { id: wordId } })
     }
 
+    async findWordByItsName(word: string){
+        return this.prisma.palavras.findFirst({where: {Verbete: word}})
+    }
+
+    async createNewWord(data: palavrasPrototype){
+        return this.prisma.palavras.create({data});
+    }
 }

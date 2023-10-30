@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { WordsRepository } from './words.repository';
 import { palavrasPrototype } from './words.controller';
 import { UsersService } from 'src/users/users.service';
@@ -23,5 +23,13 @@ export class WordsService {
     async deleteWord(wordId: number, userId: number) {
         this.usersService.checkIfAdmin(userId);
         return this.wordsRepository.deleteWordById(wordId);
+    }
+
+    async createNewWord(data: palavrasPrototype){
+        const wordExists = this.findWordByName(data.Verbete);
+        if(wordExists ){
+            throw new ConflictException("Essa palavra já existe.");
+        }
+        return this.createNewWord(data);
     }
 }
