@@ -25,11 +25,27 @@ export class WordsRepository {
         return this.prisma.palavras.delete({ where: { id: wordId } })
     }
 
-    async findWordByItsName(word: string){
-        return this.prisma.palavras.findFirst({where: {Verbete: word}})
+    async findWordByItsName(word: string) {
+        return this.prisma.palavras.findFirst({ where: { Verbete: word } })
     }
 
-    async createNewWord(data: palavrasPrototype){
-        return this.prisma.palavras.create({data});
+    async createNewWord(data: palavrasPrototype) {
+        return this.prisma.palavras.create({ data });
+    }
+
+    async findWordsByDescription(search: string) {
+        
+        return this.prisma.palavras.findMany({
+            where: {
+                OR:[
+                   {definicao: {contains: search}},
+                   {Verbete: {contains: search}}
+                ]
+                
+            },
+            select: {
+                Verbete: true
+            }
+        })
     }
 }

@@ -32,4 +32,9 @@ export class WordsService {
         }
         return this.createNewWord(data);
     }
+
+    async findWordsByDescription(search: any){
+        if(search == undefined) return []
+        return this.wordsRepository.findWordsByDescription(search);
+    }
 }

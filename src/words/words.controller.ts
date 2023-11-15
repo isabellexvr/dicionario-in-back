@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { WordsService } from './words.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { palavras, usuarios } from '@prisma/client';
@@ -43,6 +43,11 @@ export type palavrasPrototype = {
 export class WordsController {
     constructor(private wordsService: WordsService) { }
 
+    @Get("search")
+    async searchWords(@Query() data: any) {
+        return this.wordsService.findWordsByDescription(data.input)
+    }
+
     @Get("")
     async getAllWords() {
         const words = await this.wordsService.findAllWords()
@@ -64,10 +69,12 @@ export class WordsController {
     async deleteWord(@Param("wordId", ParseIntPipe) wordId: number, @AuthorizedUser() user: usuarios) {
         return this.wordsService.deleteWord(wordId, user.id);
     }
-    
+
     @UseGuards(AuthGuard)
     @Post("new-word")
-    async createNewWord(@Body() data: palavrasPrototype){
+    async createNewWord(@Body() data: palavrasPrototype) {
         return this.createNewWord(data);
     }
+
+
 }
