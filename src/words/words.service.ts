@@ -15,6 +15,10 @@ export class WordsService {
         return this.wordsRepository.findWordByName(word);
     }
 
+    async findWordById(id: number){
+        return this.wordsRepository.findWordById(id);
+    }
+
     async editWord(wordId: number, data: palavrasPrototype, userId: number) {
         this.usersService.checkIfAdmin(userId);
         return this.wordsRepository.editWordById(wordId, data);
@@ -34,7 +38,7 @@ export class WordsService {
     }
 
     async findWordsByDescription(search: any){
-        if(search == undefined) return []
+        if(search == "") return []
         return this.wordsRepository.findWordsByDescription(search);
     }
 }

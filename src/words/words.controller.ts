@@ -48,6 +48,11 @@ export class WordsController {
         return this.wordsService.findWordsByDescription(data.input)
     }
 
+    @Get(":id")
+    async getWordById(@Param("id", ParseIntPipe)id: number){
+        return this.wordsService.findWordById(id);
+    }
+
     @Get("")
     async getAllWords() {
         const words = await this.wordsService.findAllWords()

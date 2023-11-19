@@ -17,6 +17,12 @@ export class WordsRepository {
         });
     }
 
+    async findWordById(id: number){
+        return this.prisma.palavras.findFirst({
+            where: {id}
+        })
+    }
+
     async editWordById(wordId: number, data: palavrasPrototype) {
         return this.prisma.palavras.update({ where: { id: wordId }, data });
     }
@@ -44,8 +50,10 @@ export class WordsRepository {
                 
             },
             select: {
-                Verbete: true
-            }
+                Verbete: true,
+                definicao: true
+            },
+            take: 5
         })
     }
 }
