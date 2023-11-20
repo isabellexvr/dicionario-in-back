@@ -11,7 +11,6 @@ export class UsersService {
 
     async createUser(userInfo: CreateUserDTO){
         const user = await this.usersRepository.findByEmail(userInfo.email);
-
         if (user) throw new ConflictException("Já existe um usuário cadastrado com esse e-mail.");
 
         return await this.usersRepository.create({...userInfo, senha: bcrypt.hashSync(userInfo.senha, this.ROUNDS)});
