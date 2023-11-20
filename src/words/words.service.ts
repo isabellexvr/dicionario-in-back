@@ -15,6 +15,11 @@ export class WordsService {
         return this.wordsRepository.findWordByName(word);
     }
 
+    async findWordByFirstChar(char: string){
+        //order by id
+        return this.wordsRepository.findWordByFirstChar(char);
+    }
+
     async findWordById(id: number){
         return this.wordsRepository.findWordById(id);
     }

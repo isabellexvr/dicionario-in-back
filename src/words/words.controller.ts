@@ -48,21 +48,28 @@ export class WordsController {
         return this.wordsService.findWordsByDescription(data.input)
     }
 
-    @Get(":id")
+    @Get("name/:word")
+    async getWordByName(@Param("word") word: string) {
+        return this.wordsService.findWordByName(word);
+    }
+
+    @Get("id/:id")
     async getWordById(@Param("id", ParseIntPipe)id: number){
         return this.wordsService.findWordById(id);
     }
 
-    @Get("")
+    @Get("char/:char")
+    async getWordByFirstChar(@Param("char") char: string){
+        return this.wordsService.findWordByFirstChar(char);
+    }
+
+    @Get("all")
     async getAllWords() {
         const words = await this.wordsService.findAllWords()
         return words;
     }
 
-    @Get(":word")
-    async getWordByName(@Param("word") word: string) {
-        return this.wordsService.findWordByName(word);
-    }
+
 
     @UseGuards(AuthGuard)
     @Put("edit-word/:wordId")

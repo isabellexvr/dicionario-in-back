@@ -23,6 +23,18 @@ export class WordsRepository {
         })
     }
 
+    async findWordByFirstChar(char: string){
+        return this.prisma.palavras.findMany({
+            where: {
+                Verbete: {
+                    startsWith: char,
+                    mode: "insensitive"
+                }
+            },
+            orderBy: {id: 'asc'}
+        })
+    }
+
     async editWordById(wordId: number, data: palavrasPrototype) {
         return this.prisma.palavras.update({ where: { id: wordId }, data });
     }
