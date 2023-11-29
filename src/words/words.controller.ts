@@ -3,45 +3,13 @@ import { WordsService } from './words.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { palavras, usuarios } from '@prisma/client';
 import { AuthorizedUser } from 'src/decorators/authorized-user.decorator';
+import { palavrasPrototype } from './models';
 
-export type palavrasPrototype = {
-    Código: string;
-    Verbete: string;
-    verbeteIngles: string;
-    num: number;
-    indice: number;
-    cabeca_simb: string;
-    rubrica: string;
-    grupo: string;
-    classeGram: string;
-    genero_num: string;
-    volp: string;
-    fontes: string;
-    remissivaComplementar: string;
-    remissivaImperativa: string;
-    definicao: string;
-    fórmula: string;
-    topicoIluminacaoNatural: string;
-    locucao_expressoes: string;
-    etimologiaBruto: string;
-    ortoepia: string;
-    plural: string;
-    sinonimosVariantes: string;
-    antonimos: string;
-    achega: string;
-    exemplo: string;
-    abonacao_citacoes_adagios: string;
-    outrasLinguas: string;
-    fig: string;
-    comentariosExtraBrutos: string;
-    comentariosExtraEditados: string;
-    obsrcc: string;
-    voceSabia: string;
-}
 
 @Controller('words')
 export class WordsController {
     constructor(private wordsService: WordsService) { }
+
 
     @Get("search")
     async searchWords(@Query() data: any) {
@@ -51,6 +19,11 @@ export class WordsController {
     @Get("name/:word")
     async getWordByName(@Param("word") word: string) {
         return this.wordsService.findWordByName(word);
+    }
+
+    @Get("tabs/:word")
+    async getWordTabs(@Param("word") word: string){
+        return this.wordsService.findTabsByWordName(word);
     }
 
     @Get("id/:id")

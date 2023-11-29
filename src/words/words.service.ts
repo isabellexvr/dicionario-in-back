@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { WordsRepository } from './words.repository';
-import { palavrasPrototype } from './words.controller';
+import { palavrasPrototype } from './models';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -13,6 +13,10 @@ export class WordsService {
 
     async findWordByName(word: string) {
         return this.wordsRepository.findWordByName(word);
+    }
+
+    async findTabsByWordName(word: string){
+        return this.wordsRepository.tabsByWordName(word);
     }
 
     async findWordByFirstChar(char: string){
