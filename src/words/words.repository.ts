@@ -20,7 +20,10 @@ export class WordsRepository {
 
     async tabsByWordName(word: string) {
         const wordInfo = await this.findWordByName(word);
-        return Object.keys(wordInfo).map((column) => {
+        if(!wordInfo ) return []
+        const wordInfoValues = Object.values(wordInfo);
+        return Object.keys(wordInfo).map((column, index) => {
+            if(wordInfoValues[index] === null) return;
             if (column === 'verbeteIngles') {
                 return "Inglês";
             } else if (column === 'num') {
@@ -72,7 +75,7 @@ export class WordsRepository {
             } else if (column === 'ortoepia') {
                 return "Ortoépia";
             } else if (column === 'Verbete') {
-                return "Verbete";
+                //return "Verbete";
             } else if (column === 'C_digo') {
                // return "Código";
             } else if (column === 'indice') {
