@@ -1,5 +1,5 @@
 import { PrismaService } from "src/prisma/prisma.service";
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { palavrasPrototype } from "./models";
 import { palavras } from "@prisma/client";
 
@@ -20,10 +20,10 @@ export class WordsRepository {
 
     async tabsByWordName(word: string) {
         const wordInfo = await this.findWordByName(word);
-        if(!wordInfo ) return []
+        if (!wordInfo) return []
         const wordInfoValues = Object.values(wordInfo);
         return Object.keys(wordInfo).map((column, index) => {
-            if(wordInfoValues[index] === null) return;
+            if (wordInfoValues[index] === null) return;
             if (column === 'verbeteIngles') {
                 return "Inglês";
             } else if (column === 'num') {
@@ -37,7 +37,7 @@ export class WordsRepository {
             } else if (column === 'classeGram') {
                 //return "Classe Gramatical";
             } else if (column === 'genero_num') {
-               // return "Gênero/Número";
+                // return "Gênero/Número";
             } else if (column === 'volp') {
                 return "Volp";
             } else if (column === 'fontes') {
@@ -67,9 +67,9 @@ export class WordsRepository {
             } else if (column === 'fig') {
                 return "Fig";
             } else if (column === 'comentariosExtraBrutos') {
-              //  return "Comentários Extras Brutos";
+                //  return "Comentários Extras Brutos";
             } else if (column === 'comentariosExtraEditados') {
-              //  return "Comentários Extras Editados";
+                //  return "Comentários Extras Editados";
             } else if (column === 'voceSabia') {
                 return "Você sabia?";
             } else if (column === 'ortoepia') {
@@ -77,19 +77,19 @@ export class WordsRepository {
             } else if (column === 'Verbete') {
                 //return "Verbete";
             } else if (column === 'C_digo') {
-               // return "Código";
+                // return "Código";
             } else if (column === 'indice') {
-               // return "Índice";
+                // return "Índice";
             } else if (column === 'definicao') {
                 //return "Definição";
             } else if (column === 'topicoIluminacaoNatural') {
-               // return "Tópico de Iluminação Natural";
+                // return "Tópico de Iluminação Natural";
             } else if (column === 'etimologiaBruto') {
                 return "Etimologia (Bruto)";
             } else if (column === 'outrasLinguas') {
                 return "Outras Línguas";
             } else if (column === 'obsrcc') {
-               // return "OBSRCC";
+                // return "OBSRCC";
             }
         });
     }
@@ -144,5 +144,94 @@ export class WordsRepository {
             },
             take: 5
         })
+    }
+
+    async simpleSearch(query: string, startsWith: string | null, endsWith: string | null) {
+
+        const newQuery = query.replaceAll("?", "%");
+
+        if (!startsWith && !endsWith) {
+            return this.prisma.palavras.findMany({
+                where: {
+                    Verbete: { contains: newQuery }
+                },
+                select: {
+                    Verbete: true
+                }
+            })
+        } else if (newQuery && startsWith && !endsWith) {
+            //apenas startsWith
+            return this.prisma.palavras.findMany({
+                where: {
+                    AND: [
+                        {
+                            Verbete: {
+                                startsWith: startsWith,
+                                mode: "insensitive"
+                            }
+                        },
+
+                        {
+                            Verbete: {
+                                contains: newQuery
+                            }
+                        }
+                    ]
+                },
+                select: {
+                    Verbete: true
+                }
+            })
+        } else if (newQuery && !startsWith && endsWith) {
+            //apenas endsWith
+            return this.prisma.palavras.findMany({
+                where: {
+                    AND: [
+                        {
+                            Verbete: {
+                                endsWith: startsWith,
+                                mode: "insensitive"
+                            }
+                        },
+
+                        {
+                            Verbete: {
+                                contains: newQuery
+                            }
+                        }
+                    ]
+                },
+                select: {
+                    Verbete: true
+                }
+            })
+        } else if (newQuery && startsWith && endsWith) {
+            //ends e starts with
+            return this.prisma.palavras.findMany({
+                where: {
+                    AND: [
+                        {
+                            Verbete: {
+                                startsWith: startsWith,
+                                mode: "insensitive"
+                            }
+                        }, {
+                            Verbete: {
+                                endsWith: endsWith,
+                                mode: "insensitive"
+                            }
+                        },
+                        {
+                            Verbete: {
+                                contains: newQuery
+                            }
+                        }
+                    ]
+                },
+                select: {
+                    Verbete: true
+                }
+            })
+        }
     }
 }

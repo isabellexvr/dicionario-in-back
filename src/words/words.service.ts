@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { WordsRepository } from './words.repository';
-import { palavrasPrototype } from './models';
+import { Searches, palavrasPrototype } from './models';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -44,6 +44,14 @@ export class WordsService {
             throw new ConflictException("Essa palavra já existe.");
         }
         return this.createNewWord(data);
+    }
+
+    async search(query: string, options: Searches){
+        const {startsWith, endsWith} = options;
+
+        const answer = await this.wordsRepository.simpleSearch(query, startsWith, endsWith);
+
+        return answer.map(e => e.Verbete);
     }
 
     async findWordsByDescription(search: any){

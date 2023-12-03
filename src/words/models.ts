@@ -33,3 +33,7 @@ export type palavrasPrototype = {
     voceSabia: string;
 }
 
+export type Searches = {
+    startsWith: string | null,
+    endsWith: string | null
+}

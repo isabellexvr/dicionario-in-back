@@ -3,17 +3,18 @@ import { WordsService } from './words.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { palavras, usuarios } from '@prisma/client';
 import { AuthorizedUser } from 'src/decorators/authorized-user.decorator';
-import { palavrasPrototype } from './models';
+import { Searches, palavrasPrototype } from './models';
+
 
 
 @Controller('words')
 export class WordsController {
     constructor(private wordsService: WordsService) { }
 
-
-    @Get("search")
-    async searchWords(@Query() data: any) {
-        return this.wordsService.findWordsByDescription(data.input)
+    @Post("search")
+    async searchWords(@Query() query: any, @Body() options: Searches) {
+       // return this.wordsService.findWordsByDescription(data.input)
+        return this.wordsService.search(query.input, options);
     }
 
     @Get("name/:word")
@@ -41,8 +42,6 @@ export class WordsController {
         const words = await this.wordsService.findAllWords()
         return words;
     }
-
-
 
     @UseGuards(AuthGuard)
     @Put("edit-word/:wordId")
