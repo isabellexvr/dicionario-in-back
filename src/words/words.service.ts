@@ -51,11 +51,14 @@ export class WordsService {
 
         const answer = await this.wordsRepository.simpleSearch(query, startsWith, endsWith);
 
+        if(!answer) return []
+
         return answer.map(e => e.Verbete);
     }
 
     async findWordsByDescription(search: any){
-        if(search == "") return []
-        return this.wordsRepository.findWordsByDescription(search);
+       // if(search == "") return []
+        const answer = await this.wordsRepository.findWordsByDescription(search);
+
     }
 }

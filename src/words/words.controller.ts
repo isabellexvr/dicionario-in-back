@@ -13,7 +13,6 @@ export class WordsController {
 
     @Post("search")
     async searchWords(@Query() query: any, @Body() options: Searches) {
-       // return this.wordsService.findWordsByDescription(data.input)
         return this.wordsService.search(query.input, options);
     }
 

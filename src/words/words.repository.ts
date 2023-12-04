@@ -1,14 +1,13 @@
 import { PrismaService } from "src/prisma/prisma.service";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { palavrasPrototype } from "./models";
-import { palavras } from "@prisma/client";
 
 @Injectable()
 export class WordsRepository {
     constructor(private prisma: PrismaService) { }
 
     async findWords() {
-        return this.prisma.palavras.findMany({ orderBy: { Verbete: 'asc' } });
+        return this.prisma.palavras.findMany({ orderBy: { id: 'asc' } });
     }
 
     async findWordByName(word: string) {
@@ -39,9 +38,9 @@ export class WordsRepository {
             } else if (column === 'genero_num') {
                 // return "Gênero/Número";
             } else if (column === 'volp') {
-                return "Volp";
+                //return "Volp";
             } else if (column === 'fontes') {
-                return "Fontes";
+                //return "Fontes";
             } else if (column === 'remissivaComplementar') {
                 return "Rem. Complementar";
             } else if (column === 'remissivaImperativa') {
@@ -159,7 +158,7 @@ export class WordsRepository {
                     Verbete: true
                 }
             })
-        } else if (newQuery && startsWith && !endsWith) {
+        } else if (startsWith && !endsWith) {
             //apenas startsWith
             return this.prisma.palavras.findMany({
                 where: {
@@ -182,14 +181,14 @@ export class WordsRepository {
                     Verbete: true
                 }
             })
-        } else if (newQuery && !startsWith && endsWith) {
+        } else if (!startsWith && endsWith) {   
             //apenas endsWith
             return this.prisma.palavras.findMany({
                 where: {
                     AND: [
                         {
                             Verbete: {
-                                endsWith: startsWith,
+                                endsWith: endsWith,
                                 mode: "insensitive"
                             }
                         },
@@ -205,7 +204,7 @@ export class WordsRepository {
                     Verbete: true
                 }
             })
-        } else if (newQuery && startsWith && endsWith) {
+        } else if ( startsWith && endsWith) {
             //ends e starts with
             return this.prisma.palavras.findMany({
                 where: {
