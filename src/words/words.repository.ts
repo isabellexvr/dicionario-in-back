@@ -42,9 +42,9 @@ export class WordsRepository {
             } else if (column === 'fontes') {
                 //return "Fontes";
             } else if (column === 'remissivaComplementar') {
-                return "Rem. Complementar";
+                //return "Rem. Complementar";
             } else if (column === 'remissivaImperativa') {
-                return "Rem. Imperativa";
+               // return "Rem. Imperativa";
             } else if (column === 'f_rmula') {
                 return "Fórmula";
             } else if (column === 'locucao_expressoes') {
