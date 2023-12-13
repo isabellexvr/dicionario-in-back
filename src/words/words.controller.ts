@@ -1,19 +1,22 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { WordsService } from './words.service';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { palavras, usuarios } from '@prisma/client';
+import {  usuarios } from '@prisma/client';
 import { AuthorizedUser } from 'src/decorators/authorized-user.decorator';
-import { Searches, palavrasPrototype } from './models';
-
-
+import { ReverseSearchType, Searches, palavrasPrototype } from './models';
 
 @Controller('words')
 export class WordsController {
     constructor(private wordsService: WordsService) { }
 
-    @Post("search")
+    @Post("simple-search")
     async searchWords(@Query() query: any, @Body() options: Searches) {
         return this.wordsService.search(query.input, options);
+    }
+
+    @Post("reverse-search")
+    async reverseSearch(@Body() words: ReverseSearchType){
+        return this.wordsService.reverseSearch(words);
     }
 
     @Get("name/:word")

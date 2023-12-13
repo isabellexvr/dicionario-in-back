@@ -37,3 +37,8 @@ export type Searches = {
     startsWith: string | null,
     endsWith: string | null
 }
+
+export type ReverseSearchType = {
+    contains: string[],
+    doesNotContain: string[]
+}

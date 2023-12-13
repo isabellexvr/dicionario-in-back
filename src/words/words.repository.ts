@@ -1,6 +1,6 @@
 import { PrismaService } from "src/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
-import { palavrasPrototype } from "./models";
+import { ReverseSearchType, palavrasPrototype } from "./models";
 
 @Injectable()
 export class WordsRepository {
@@ -44,7 +44,7 @@ export class WordsRepository {
             } else if (column === 'remissivaComplementar') {
                 //return "Rem. Complementar";
             } else if (column === 'remissivaImperativa') {
-               // return "Rem. Imperativa";
+                // return "Rem. Imperativa";
             } else if (column === 'f_rmula') {
                 return "Fórmula";
             } else if (column === 'locucao_expressoes') {
@@ -181,7 +181,7 @@ export class WordsRepository {
                     Verbete: true
                 }
             })
-        } else if (!startsWith && endsWith) {   
+        } else if (!startsWith && endsWith) {
             //apenas endsWith
             return this.prisma.palavras.findMany({
                 where: {
@@ -204,7 +204,7 @@ export class WordsRepository {
                     Verbete: true
                 }
             })
-        } else if ( startsWith && endsWith) {
+        } else if (startsWith && endsWith) {
             //ends e starts with
             return this.prisma.palavras.findMany({
                 where: {
@@ -232,5 +232,73 @@ export class WordsRepository {
                 }
             })
         }
+    }
+
+    async reverseSearchComplete(words: ReverseSearchType) {
+        return this.prisma.palavras.findMany({
+            where: {
+                AND: [
+                    {
+                        AND: words.contains.map((searchString) => ({
+                            definicao: {
+                                contains: searchString,
+                                mode: 'insensitive'
+                            }
+                        })),
+                    },
+                    {
+                        NOT: {
+                            OR: words.doesNotContain.map((searchString) => ({
+                                definicao: {
+                                    contains: searchString,
+                                    mode: "insensitive"
+                                }
+                            }))
+                        }
+                    }
+                ]
+            },
+
+            select: {
+                Verbete: true,
+                definicao: true
+            }
+        })
+    }
+
+    async reverseSearchContainsOnly(words: string[]) {
+        return this.prisma.palavras.findMany({
+            where: {
+                AND: words.map((searchString) => ({
+                    definicao: {
+                        contains: searchString,
+                        mode: "insensitive"
+                    }
+                }))
+            },
+            select: {
+                Verbete: true,
+                definicao: true
+            }
+        })
+    }
+
+    async reverseSearchNotContainsOnly(words: string[]) {
+        return this.prisma.palavras.findMany({
+            where: {
+                NOT: {
+                    OR: words.map((searchString) => ({
+                        definicao: {
+                            contains: searchString,
+                            mode: "insensitive"
+                        }
+                    }))
+                }
+            },
+            select: {
+                Verbete: true,
+                definicao: true
+            }
+        });
     }
 }
