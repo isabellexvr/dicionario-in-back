@@ -261,7 +261,7 @@ export class WordsRepository {
 
             select: {
                 Verbete: true,
-                definicao: true
+               // definicao: true
             }
         })
     }
@@ -278,7 +278,7 @@ export class WordsRepository {
             },
             select: {
                 Verbete: true,
-                definicao: true
+               // definicao: true
             }
         })
     }
@@ -297,7 +297,7 @@ export class WordsRepository {
             },
             select: {
                 Verbete: true,
-                definicao: true
+               // definicao: true
             }
         });
     }
