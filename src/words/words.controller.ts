@@ -5,6 +5,11 @@ import {  usuarios } from '@prisma/client';
 import { AuthorizedUser } from 'src/decorators/authorized-user.decorator';
 import { ReverseSearchType, Searches, palavrasPrototype } from './models';
 
+export type TabsFilter = {
+    containingTabs: string[],
+    notContainingTabs: string[]
+}
+
 @Controller('words')
 export class WordsController {
     constructor(private wordsService: WordsService) { }
@@ -12,6 +17,11 @@ export class WordsController {
     @Post("simple-search")
     async searchWords(@Query() query: any, @Body() options: Searches) {
         return this.wordsService.search(query.input, options);
+    }
+    
+    @Post("filter-by-tabs")
+    async filterWordsByTabs(@Body() body: TabsFilter){
+        return this.wordsService.filterWordsByTabs(body);
     }
 
     @Post("reverse-search")

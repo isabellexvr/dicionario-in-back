@@ -2,6 +2,8 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { WordsRepository } from './words.repository';
 import { ReverseSearchType, Searches, palavrasPrototype } from './models';
 import { UsersService } from 'src/users/users.service';
+import { TabsFilter } from './words.controller';
+import { correctNamesToColumnNames } from './helpers';
 
 @Injectable()
 export class WordsService {
@@ -9,6 +11,12 @@ export class WordsService {
 
     async findAllWords() {
         return this.wordsRepository.findWords()
+    }
+
+    async filterWordsByTabs(tabs: TabsFilter) {
+        const { notContainingTabs, containingTabs } = tabs;
+
+        return this.wordsRepository.filterWordsByTabs(correctNamesToColumnNames(containingTabs), correctNamesToColumnNames(notContainingTabs));
     }
 
     async findWordByName(word: string) {
@@ -67,11 +75,11 @@ export class WordsService {
             return this.wordsRepository.reverseSearchComplete(words)
         } else if (words.contains.length <= 0 && words.doesNotContain.length > 0) {
             return this.wordsRepository.reverseSearchNotContainsOnly(words.doesNotContain);
-        }else if(words.contains.length > 0 && words.doesNotContain.length <= 0){
+        } else if (words.contains.length > 0 && words.doesNotContain.length <= 0) {
             return this.wordsRepository.reverseSearchContainsOnly(words.contains);
-        }else{
+        } else {
             throw new BadRequestException("wow");
         }
-        
+
     }
 }

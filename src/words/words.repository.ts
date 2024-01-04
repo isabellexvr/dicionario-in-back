@@ -17,14 +17,11 @@ export class WordsRepository {
             orderBy: { Verbete: 'asc' }
         });
 
-      //  this.filterWordsByTabs(correctNamesToColumnNames([]), correctNamesToColumnNames(["Definição"]));
-
         return replaceColumnsNames(data);
     }
 
     async tabsByWordName(word: string) {
         const wordInfo = await this.findWordByName(word);
-        //console.log(wordInfo);
         if (!wordInfo) return []
 
         return FilterWantedTabs(wordInfo);
