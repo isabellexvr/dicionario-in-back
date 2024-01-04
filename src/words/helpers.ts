@@ -1,104 +1,90 @@
 import { palavras } from "@prisma/client";
+import { Columns, columnsNames, correctColumnsNames, mappedColumns } from "./constants";
 
 export function replaceColumnsNames(object: palavras) {
-    const newOnes = [
-        'Código',
-        'Verbete',
-        'Inglês',
-        'Num',
-        'Índice',
-        'Cabeça/Símbolo',
-        'Rubrica',
-        'Grupo',
-        'Classe Gramatical',
-        'Gênero/Número',
-        'Volp',
-        'Fontes',
-        'Rem. Complementar',
-        'Rem. Imperativa',
-        'Definição',
-        'Fórmula',
-        'Tópico de Iluminação Natural',
-        'Locução/Expressões',
-        'Etimologia',
-        'Ortoépia',
-        'Plural',
-        'Sinônimos/Variantes',
-        'Antônimos',
-        'Achega',
-        'Exemplo',
-        'Abonação/Citações/Adágios',
-        'Outras Línguas',
-        'Fig',
-        'Comentários Extras Brutos',
-        'Comentários Extra Editados',
-        'OBSRCC',
-        'Você sabia?',
-        'id',
-    ]
 
     const keys = Object.keys(object);
 
-    for(let i = 0; i < keys.length ; i++){
+    for (let i = 0; i < keys.length; i++) {
         const value = object[keys[i]];
 
         delete object[keys[i]]
 
-        object[newOnes[i]] = value;
+        object[correctColumnsNames[i]] = value;
 
     }
-
 
     return object
 }
 
-export function FilterWantedTabs(obj: palavras){
+
+export function replaceNamesToColumns(object: Columns) {
+    const keys = Object.keys(object);
+
+    for (let i = 0; i < keys.length; i++) {
+        const value = object[keys[i]];
+
+        delete object[keys[i]];
+
+        object[columnsNames[i]] = value;
+
+    }
+
+    return object;
+}
+
+export function correctNamesToColumnNames(array: string[]) {
+
+    return array.map(e => mappedColumns[e]);
+}
+
+export function FilterWantedTabs(obj: palavras) {
     return Object.keys(obj).filter(e => {
-        if( e === "Classe Gramatical"){
+        if (e === "Classe Gramatical") {
             return false;
-        }else if( e === "Gênero/Número"){
+        } else if (e === "Gênero/Número") {
             return false;
-        }else if( e === "Volp"){
-            return false;
-        }
-        else if( e === "Fontes"){
+        } else if (e === "Volp") {
             return false;
         }
-        else if( e === "Rem. Complementar"){
+        else if (e === "Fontes") {
             return false;
         }
-        else if( e === "Rem. Imperativa"){
+        else if (e === "Rem. Complementar") {
             return false;
         }
-        else if( e === "Comentários Extras Brutos"){
+        else if (e === "Rem. Imperativa") {
             return false;
         }
-        else if( e === "Comentários Extras Editados"){
+        else if (e === "Comentários Extras Brutos") {
             return false;
         }
-        else if( e === "Verbete"){
+        else if (e === "Comentários Extras Editados") {
             return false;
         }
-        else if( e === "Código"){
+        else if (e === "Verbete") {
             return false;
         }
-        else if( e === "Índice"){
+        else if (e === "Código") {
             return false;
         }
-        else if( e === "Definição"){
+        else if (e === "Índice") {
             return false;
         }
-        else if( e === "Tópico de Iluminação Natural"){
+        else if (e === "Definição") {
             return false;
         }
-        else if( e === "OBSRCC"){
+        else if (e === "Tópico de Iluminação Natural") {
             return false;
-        }else if(obj[e] === null){
+        }
+        else if (e === "OBSRCC") {
+            return false;
+        }
+        else if (e === "id") {
             return false
-        }
-        else if(e === "id"){
+        }else if (obj[e] === null) {
             return false
-        }else{
+        }else {
             return true;
         }
     })

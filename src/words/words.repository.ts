@@ -1,8 +1,7 @@
 import { PrismaService } from "src/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { ReverseSearchType, palavrasPrototype } from "./models";
-import { palavras } from "@prisma/client";
-import { FilterWantedTabs, replaceColumnsNames } from "./helpers";
+import { FilterWantedTabs, correctNamesToColumnNames, replaceColumnsNames } from "./helpers";
 
 @Injectable()
 export class WordsRepository {
@@ -18,14 +17,16 @@ export class WordsRepository {
             orderBy: { Verbete: 'asc' }
         });
 
-        return replaceColumnsNames(data);
+      //  this.filterWordsByTabs(correctNamesToColumnNames([]), correctNamesToColumnNames(["Definição"]));
 
+        return replaceColumnsNames(data);
     }
 
     async tabsByWordName(word: string) {
         const wordInfo = await this.findWordByName(word);
+        //console.log(wordInfo);
         if (!wordInfo) return []
-        
+
         return FilterWantedTabs(wordInfo);
     }
 
@@ -197,7 +198,7 @@ export class WordsRepository {
 
             select: {
                 Verbete: true,
-               // definicao: true
+                // definicao: true
             }
         })
     }
@@ -214,7 +215,7 @@ export class WordsRepository {
             },
             select: {
                 Verbete: true,
-               // definicao: true
+                // definicao: true
             }
         })
     }
@@ -233,8 +234,26 @@ export class WordsRepository {
             },
             select: {
                 Verbete: true,
-               // definicao: true
+                // definicao: true
             }
         });
+    }
+
+    async filterWordsByTabs(containingTabs: string[],
+        notContainingTabs: string[]) {
+
+        return this.prisma.palavras.findMany({
+            where: {
+                AND: [
+                    { AND: notContainingTabs.map(t => ({ [t]: null })), },
+                    {
+                        NOT: {
+                            AND: containingTabs.map(t => ({ [t]: null }))
+                        }
+                    }
+                ]
+            }
+        })
+
     }
 }
