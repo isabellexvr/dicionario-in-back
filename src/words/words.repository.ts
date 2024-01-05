@@ -239,6 +239,8 @@ export class WordsRepository {
     async filterWordsByTabs(containingTabs: string[],
         notContainingTabs: string[]) {
 
+
+
         return this.prisma.palavras.findMany({
             where: {
                 AND: [
@@ -249,6 +251,9 @@ export class WordsRepository {
                         }
                     }
                 ]
+            },
+            select: {
+                Verbete: true
             }
         })
 

@@ -34,7 +34,7 @@ export function replaceNamesToColumns(object: Columns) {
 }
 
 export function correctNamesToColumnNames(array: string[]) {
-
+    if(array.length <= 0 )return []
     return array.map(e => mappedColumns[e]);
 }
 

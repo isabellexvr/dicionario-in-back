@@ -64,12 +64,6 @@ export class WordsService {
         return answer.map(e => e.Verbete);
     }
 
-    async findWordsByDescription(search: any) {
-        // if(search == "") return []
-        const answer = await this.wordsRepository.findWordsByDescription(search);
-
-    }
-
     async reverseSearch(words: ReverseSearchType) {
         if (words.contains.length > 0 && words.doesNotContain.length > 0) {
             return this.wordsRepository.reverseSearchComplete(words)
