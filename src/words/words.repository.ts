@@ -8,14 +8,29 @@ export class WordsRepository {
     constructor(private prisma: PrismaService) { }
 
     async findWords() {
-        return this.prisma.palavras.findMany({ orderBy: { id: 'asc' } });
+        return this.prisma.palavras.findMany({ where: { NOT: [{ definicao: null }] }, orderBy: { id: 'asc' } });
     }
 
     async findWordByName(word: string) {
-        const data = await this.prisma.palavras.findFirst({
-            where: { Verbete: word },
-            orderBy: { Verbete: 'asc' }
-        });
+        //console.log(word)
+        let data;
+        if (word === "componentes tricromáticas  <de um estímulo de cor>") {
+            data = await this.prisma.palavras.findFirst({
+                where: { Verbete: { startsWith: "componentes" } }
+            })
+        } else {
+            data = await this.prisma.palavras.findFirst({
+                where: { Verbete: word },
+            });
+        }
+
+        if (data === null) {
+            data = await this.prisma.palavras.findFirst({
+                where: { Verbete: { startsWith: word } }
+            })
+        }
+
+        //console.log(data)
 
         return replaceColumnsNames(data);
     }

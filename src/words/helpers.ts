@@ -34,7 +34,7 @@ export function replaceNamesToColumns(object: Columns) {
 }
 
 export function correctNamesToColumnNames(array: string[]) {
-    if(array.length <= 0 )return []
+    if (array.length <= 0) return []
     return array.map(e => mappedColumns[e]);
 }
 
@@ -74,17 +74,20 @@ export function FilterWantedTabs(obj: palavras) {
         else if (e === "Definição") {
             return false;
         }
-        else if (e === "Tópico de Iluminação Natural") {
-            return false;
-        }
         else if (e === "OBSRCC") {
             return false;
         }
         else if (e === "id") {
             return false
-        }else if (obj[e] === null) {
+        } else if (obj[e] === null) {
             return false
-        }else {
+        } else if (e === "Num") {
+            return false
+        
+        }else if (e === "Num") {
+            return false
+        
+        } else {
             return true;
         }
     })
